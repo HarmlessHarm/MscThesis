@@ -45,18 +45,21 @@ class DataScienceBowl(Dataset):
 		# Get image
 		img_path_obj = self.paths[idx]
 		# read image and get rid of Alpha channel
-		img = read_image(img_path_obj['image'], ImageReadMode.RGB)
+		img = read_image(img_path_obj['image'], ImageReadMode.RGB).type(torch.FloatTensor)
+
 
 		# Get masks
 		combined_mask = torch.zeros(img[0,:,:].shape)
 
 		for mask_path in img_path_obj['masks']:
-			mask = read_image(mask_path, ImageReadMode.GRAY)
+			mask = read_image(mask_path, ImageReadMode.GRAY).type(torch.FloatTensor)
 			# Combine masks
-			combined_mask = torch.logical_or(combined_mask, mask)
+			combined_mask = torch.logical_or(combined_mask, mask).type(torch.FloatTensor)
 	
+
 		if self.transform:
 			img = self.transform(img)
+			combined_mask = self.transform(combined_mask)
 
 		sample = { 'image': img, 'mask': combined_mask }
 
@@ -64,10 +67,21 @@ class DataScienceBowl(Dataset):
 
 
 if __name__ == '__main__':
-	dataset = DataScienceBowl('data\\data_science_train')
+	import torch
+	import torchvision.transforms as T
 
-	plt.imshow(dataset[0]['image'].permute(1,2,0), cmap='gray')
-	plt.show()
+	transform = T.Compose([
+		T.Resize(256),
+		T.CenterCrop(224),
+	#     T.ToTensor()
+	#     T.Normalize(mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225])
+	])
+	dataset = DataScienceBowl('data/data_science_train', transform=transform)
+
+	print(dataset[0]['image'].shape)
+
+	# plt.imshow(dataset[0]['image'].permute(1,2,0), cmap='gray')
+	# plt.show()
 
 	
 
