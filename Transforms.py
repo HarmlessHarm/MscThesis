@@ -13,13 +13,13 @@ from kornia.augmentation import AugmentationBase2D
 # ColorJitter: K.augmentation.ColorJitter(params)(img)
 class ColorJitter(K.augmentation.ColorJitter):
 	"""docstring for ColorJitter"""
-	def __init__(self, brightness=0, contrast=0, saturation=0, hue=0, return_transform, same_on_batch):
+	def __init__(self, brightness=0, contrast=0, saturation=0, hue=0, return_transform=False, same_on_batch=True):
 		super().__init__(brightness, contrast, saturation, hue, return_transform, same_on_batch)
 		
 
 # Noise: K.augmentation.Random_Gaussian_Noise(params)(img)
-class Noise(K.augmentation.Random_Gaussian_Noise):
-	def __init__(self, mean=0, std=0, return_transform, same_on_batch):
+class Noise(K.augmentation.RandomGaussianNoise):
+	def __init__(self, mean=0, std=0, return_transform=False, same_on_batch=True):
 		super().__init__(mean, std, return_transform, same_on_batch)
 
 
@@ -38,7 +38,7 @@ class ElasticTransform(nn.Module):
 
 	def forward(self, image_batch):
 		# maybe check image_batch?
-		return K.geometry.transform.elastic_transform2d(image_batch, 
+		img_hat = K.geometry.transform.elastic_transform2d(image_batch, 
 														self.noise, 
 														self.kernel_size, 
 														self.sigma, 
@@ -46,11 +46,15 @@ class ElasticTransform(nn.Module):
 														self.align_corners, 
 														self.mode)
 
+		# img_hat.mean().backward()
+		
+
+		return img_hat
 
 
 class RandomConvolution(nn.Module):
 	"""docstring for RandomConvolution"""
-	def __init__(self, kernel_size=(3,3), min=-1, max=1, border_type='reflect', normalized='False'):
+	def __init__(self, kernel_size=(3,3), min=-.1, max=.1, border_type='reflect', normalized='False'):
 		super().__init__()
 		self.kernel_size = kernel_size
 		self.min = min
@@ -58,11 +62,17 @@ class RandomConvolution(nn.Module):
 		self.border_type = border_type
 		self.normalized = normalized
 		self.random_kernel = (max - min) * torch.rand(kernel_size) + min
+		self.random_kernel = self.random_kernel.unsqueeze(0)
+		# normalize to 1
+		self.random_kernel = self.random_kernel / torch.sum(self.random_kernel)
+
+		print(self.random_kernel)
+
 
 
 
 	def forward(self, image_batch):
 
-		return F.filter.filter2D(image_batch, self.random_kernel, self.border_type, self.normalized)
+		return K.filters.filter2D(image_batch, self.random_kernel, self.border_type, self.normalized)
 
 		
