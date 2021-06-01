@@ -16,7 +16,8 @@ class Trainer:
 		lr_scheduler: torch.optim.lr_scheduler = None,
 		epochs: int = 100,
 		epoch: int = 0,
-		notebook: bool = False
+		notebook: bool = False,
+		seed: int = None,
 		):
 
 
@@ -36,6 +37,11 @@ class Trainer:
 		self.validation_loss = list()
 		self.test_loss = 0
 		self.learning_rate = list()
+
+		if seed is not None:
+			torch.manual_seed(seed)
+			random.seed(seed)
+			np.random.seed(seed)
 
 	def run_trainer(self):
 
@@ -61,9 +67,11 @@ class Trainer:
 				else:
 					self.lr_scheduler.batch()
 
-		self._test()
+		if self.test_DataLoader is not None:
+			self._test()
 
 		return self.training_loss, self.validation_loss, self.learning_rate, self.test_loss, self.test_IoU
+
 
 
 	def _train(self):
@@ -158,11 +166,11 @@ class Trainer:
 				loss = self.criterion(out, target)
 				test_losses.append(loss.item())
 				# IoU
-				pred_mask = torch.sigmoid(out) > 0.5
-				mask = pred_mask.detach().cpu().numpy().reshape(-1).astype('int')
-				target = target.detach().cpu().numpy().reshape(-1).astype('int')
+				# pred_mask = torch.sigmoid(out) > 0.5
+				# mask = pred_mask.detach().cpu().numpy().reshape(-1).astype('int')
+				# target = target.detach().cpu().numpy().reshape(-1).astype('int')
 
-				batch_IoU = jaccard_score(mask, target)
+				batch_IoU = calculate_IoU(out, target)
 				test_IoUs.append(batch_IoU)
 
 
@@ -171,6 +179,13 @@ class Trainer:
 
 		batch_iter.close()
 
+	def calculate_IoU(out, target):
+		# IoU
+		pred_mask = torch.sigmoid(out) > 0.5
+		mask = pred_mask.detach().cpu().numpy().reshape(-1).astype('int')
+		target = target.detach().cpu().numpy().reshape(-1).astype('int')
+
+		return jaccard_score(mask, target)
 
 if __name__ == '__main__':
 	from DataScienceBowl import DataScienceBowl
