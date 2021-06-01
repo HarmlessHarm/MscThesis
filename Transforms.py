@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import kornia as K
+import torchvision.transforms as T
 from kornia.augmentation import AugmentationBase2D
 
 
@@ -11,10 +12,31 @@ from kornia.augmentation import AugmentationBase2D
 
 
 # ColorJitter: K.augmentation.ColorJitter(params)(img)
-class ColorJitter(K.augmentation.ColorJitter):
+class ColorJitter(torch.nn.Module):
 	"""docstring for ColorJitter"""
-	def __init__(self, brightness=0, contrast=0, saturation=0, hue=0, return_transform=False, same_on_batch=True):
-		super().__init__(brightness, contrast, saturation, hue, return_transform, same_on_batch)
+	def __init__(self, brightness=0, contrast=0, saturation=0, hue=0, same_on_batch=True, channelwise_hue=False):
+		super().__init__()
+		self.channelwise_hue = channelwise_hue
+		if self.channelwise_hue:
+			self.channelwise_transform = T.ColorJitter(brightness=hue)
+			hue = 0
+
+		self.global_transform = T.ColorJitter(brightness=brightness, contrast=contrast, saturation=saturation, hue=hue)
+
+	def forward(self, x):
+
+		if self.channelwise_hue:
+			img_channels = [x[:,c,:,:].unsqueeze(0) for c in range(3)]
+
+			img_hat_channels = list()
+
+			for img_c in img_channels:
+			    img_c_hat = self.channelwise_transform(img_c)
+			    img_hat_channels.append(img_c_hat)
+
+			x = torch.cat(img_hat_channels, 1)
+
+		return self.global_transform(x)
 		
 
 # Noise: K.augmentation.Random_Gaussian_Noise(params)(img)
