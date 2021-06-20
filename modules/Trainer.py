@@ -1,6 +1,7 @@
 # Source https://towardsdatascience.com/creating-and-training-a-u-net-model-with-pytorch-for-2d-3d-semantic-segmentation-training-3-4-8242d31de234
 import numpy as np
 import torch
+import random
 from sklearn.metrics import jaccard_score
 
 class Trainer:
@@ -21,7 +22,7 @@ class Trainer:
 		):
 
 
-		self.model = model
+		self.model = model.to(device)
 		self.device = device
 		self.criterion = criterion
 		self.optimizer = optimizer
@@ -99,7 +100,6 @@ class Trainer:
 
 			# out = out.squeeze(1)
 			# target = target.squeeze(1)
-
 			loss = self.criterion(out, target)
 			loss_value = loss.item()
 			train_losses.append(loss_value)
@@ -166,11 +166,7 @@ class Trainer:
 				loss = self.criterion(out, target)
 				test_losses.append(loss.item())
 				# IoU
-				# pred_mask = torch.sigmoid(out) > 0.5
-				# mask = pred_mask.detach().cpu().numpy().reshape(-1).astype('int')
-				# target = target.detach().cpu().numpy().reshape(-1).astype('int')
-
-				batch_IoU = calculate_IoU(out, target)
+				batch_IoU = Trainer.calculate_IoU(out, target)
 				test_IoUs.append(batch_IoU)
 
 
@@ -179,6 +175,7 @@ class Trainer:
 
 		batch_iter.close()
 
+	@staticmethod
 	def calculate_IoU(out, target):
 		# IoU
 		pred_mask = torch.sigmoid(out) > 0.5

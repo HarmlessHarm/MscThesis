@@ -18,8 +18,8 @@ class CustomUnet(torch.nn.Module):
 			return x
 
 	"""docstring for CustomUnet"""
-	def __init__(self):
-		super(CustomUnet, self).__init__()
+	def __init__(self, encoder=None):
+		super().__init__()
 
 		self.model = smp.Unet(
 			encoder_name = "resnet18",
@@ -27,6 +27,8 @@ class CustomUnet(torch.nn.Module):
 			in_channels = 3,
 			classes = 1
 		)
+		if encoder is not None:
+			self.model.encoder = encoder
 
 		self.model.encoder.layer4 = torch.nn.Identity()
 		self.model.decoder.blocks[0] = self.DecoderIdentity()

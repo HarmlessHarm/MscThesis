@@ -9,6 +9,8 @@ from torchvision import transforms, utils
 from torchvision.io import read_image
 from torchvision.io.image import ImageReadMode
 
+from kornia.utils import image_to_tensor
+
 
 
 
@@ -45,7 +47,10 @@ class DataScienceBowl(Dataset):
 		# Get image
 		img_path_obj = self.paths[idx]
 		# read image and get rid of Alpha channel
-		img = read_image(img_path_obj['image'], ImageReadMode.RGB).type(torch.FloatTensor)
+		# img range is 0-1 not 0-255
+		img = read_image(img_path_obj['image'], ImageReadMode.RGB).type(torch.FloatTensor) / 255
+
+		# img = image_to_tensor(img)
 
 
 		# Get masks
