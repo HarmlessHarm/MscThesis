@@ -36,7 +36,9 @@ class Trainer:
 
 		self.training_loss = list()
 		self.validation_loss = list()
+		self.validation_IoU = list()
 		self.test_loss = 0
+		self.test_IoU = 0
 		self.learning_rate = list()
 
 		if seed is not None:
@@ -71,7 +73,7 @@ class Trainer:
 		if self.test_DataLoader is not None:
 			self._test()
 
-		return self.training_loss, self.validation_loss, self.learning_rate, self.test_loss, self.test_IoU
+		return self.training_loss, self.validation_loss, self.validation_IoU, self.test_loss, self.test_IoU
 
 
 
@@ -123,6 +125,8 @@ class Trainer:
 
 		self.model.eval()
 		valid_losses = list() 
+		val_IoUs = list()
+
 		batch_iter = tqdm(enumerate(self.validation_DataLoader), "Validation", total=len(self.validation_DataLoader), leave=False)
 
 		for i, sample in batch_iter:
@@ -132,18 +136,23 @@ class Trainer:
 			with torch.no_grad():
 				out = self.model(input)
 
+				# Loss
 				loss = self.criterion(out, target)
 				loss_value = loss.item()
 				valid_losses.append(loss_value)
 
+				# IoU
+				batch_IoU = Trainer.calculate_IoU(out, target)
+				val_IoUs.append(batch_IoU)
+
 				batch_iter.set_description(f'Validation: (loss {loss_value:.4f})')
 
 		self.validation_loss.append(np.mean(valid_losses))
+		self.validation_IoU.append(np.mean(val_IoUs))
 
 		batch_iter.close()
 
 	def _test(self):
-		# TODO work with test batch size larger than 1
 		if self.notebook:
 			from tqdm.notebook import tqdm, trange
 		else:

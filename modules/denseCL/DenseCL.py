@@ -5,14 +5,16 @@ from segmentation_models_pytorch.encoders import get_encoder
 
 
 from ..Transforms import CombiTransform
-from . import ProjectionModule
-from . import DenseContrastiveLoss
-from . import GlobalContrastiveLoss
+from .ProjectionModule import ProjectionModule
+
+from .DenseContrastiveLoss import DenseContrastiveLoss
+from .GlobalContrastiveLoss import GlobalContrastiveLoss
+
 
 
 class DenseCL(torch.nn.Module):
     
-    def __init__(self, lam=0.5, combination=None):
+    def __init__(self, lam=0.5, dense_head='5x5', combination=None):
         super().__init__()
         
         self.Lambda = lam
@@ -26,7 +28,7 @@ class DenseCL(torch.nn.Module):
 #         self.encoder = get_encoder('resnet18', 3, 5, 'imagenet')
         self.encoder.layer4 = torch.nn.Identity()
         
-        self.project = ProjectionModule()
+        self.project = ProjectionModule(dense_head)
         
 #         self.enc_proj = DenseContrastiveModule()
         
@@ -48,8 +50,15 @@ class DenseCL(torch.nn.Module):
         dense_pos, glob_pos = self.project(img_pos)
         dense_neg, glob_neg = self.project(img_neg)
         
-        d_loss = self.dense_loss(dense_Q, dense_pos, dense_neg)
-        g_loss = self.glob_loss(glob_Q, glob_pos, glob_neg)
+        if self.Lambda > 0:
+            d_loss = self.dense_loss(dense_Q, dense_pos, dense_neg)
+        else: d_loss = 0
+
+        if self.Lambda < 1:
+            g_loss = self.glob_loss(glob_Q, glob_pos, glob_neg)
+        else: g_loss = 0
+
+        # print(d_loss, g_loss)
         
         loss = (1 - self.Lambda) * g_loss + self.Lambda * d_loss
         

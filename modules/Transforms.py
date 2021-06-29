@@ -119,19 +119,15 @@ class RandomConvolution(nn.Module):
 		self.max = max
 		self.border_type = border_type
 		self.normalized = normalized
-		self.random_kernel = (max - min) * torch.rand(kernel_size) + min
+
+
+	def forward(self, image_batch):
+
+		self.random_kernel = (self.max - self.min) * torch.rand(self.kernel_size) + min
 		# normalize to 1
 		self.random_kernel = self.random_kernel / torch.sum(self.random_kernel)
 		# Add channel batch dimension
 		self.random_kernel = self.random_kernel.unsqueeze(0)
-
-		# print(torch.min(self.random_kernel), torch.max(self.random_kernel), torch.mean(self.random_kernel))
-
-
-
-
-
-	def forward(self, image_batch):
 
 		return K.filters.filter2D(image_batch, self.random_kernel, self.border_type, self.normalized)
 		# return 
