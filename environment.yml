@@ -12,21 +12,33 @@ dependencies:
   - backports.functools_lru_cache=1.6.3=pyhd8ed1ab_0
   - blas=1.0=mkl
   - bleach=3.3.0=pyh44b312d_0
+  - blosc=1.21.0=h19a0ad4_0
+  - brotli=1.0.9=ha925a31_2
   - brotlipy=0.7.0=py39h2bbff1b_1003
-  - ca-certificates=2020.12.5=h5b45459_0
-  - certifi=2020.12.5=py39hcbf5309_1
+  - bzip2=1.0.8=he774522_0
+  - ca-certificates=2021.5.25=haa95532_1
+  - certifi=2020.12.5=py39haa95532_0
   - cffi=1.14.5=py39h0878f49_0
   - chardet=4.0.0=py39haa95532_1003
+  - charls=2.2.0=h6c2663c_0
+  - cloudpickle=1.6.0=py_0
   - colorama=0.4.4=pyh9f0ad1d_0
   - cryptography=3.4.7=py39h71e12ea_0
   - cudatoolkit=11.1.1=heb2d755_7
   - cycler=0.10.0=py39haa95532_0
-  - decorator=5.0.5=pyhd8ed1ab_0
+  - cytoolz=0.11.0=py39h2bbff1b_0
+  - dask-core=2021.5.0=pyhd3eb1b0_0
+  - decorator=4.4.2=pyhd3eb1b0_0
   - defusedxml=0.7.1=pyhd8ed1ab_0
   - entrypoints=0.3=pyhd8ed1ab_1003
   - freetype=2.10.4=h546665d_1
+  - fsspec=0.9.0=pyhd3eb1b0_0
+  - giflib=5.2.1=h62dcd97_0
+  - icc_rt=2019.0.0=h0cc432a_1
   - icu=58.2=ha925a31_3
   - idna=2.10=pyhd3eb1b0_0
+  - imagecodecs=2021.4.28=py39h5da4933_0
+  - imageio=2.9.0=pyhd3eb1b0_0
   - importlib-metadata=3.10.0=py39hcbf5309_0
   - intel-openmp=2020.2=254
   - ipykernel=5.5.3=py39h832f523_0
@@ -35,6 +47,7 @@ dependencies:
   - ipywidgets=7.6.3=pyhd3deb0d_0
   - jedi=0.18.0=py39hcbf5309_2
   - jinja2=2.11.3=pyh44b312d_0
+  - joblib=1.0.1=pyhd3eb1b0_0
   - jpeg=9b=hb83a4c4_2
   - jsonschema=3.2.0=pyhd8ed1ab_3
   - jupyter_client=6.1.12=pyhd8ed1ab_0
@@ -42,10 +55,16 @@ dependencies:
   - jupyterlab_pygments=0.1.2=pyh9f0ad1d_0
   - jupyterlab_widgets=1.0.0=pyhd8ed1ab_1
   - kiwisolver=1.3.1=py39hd77b12b_0
+  - lcms2=2.12=h83e58a3_0
+  - lerc=2.2.1=hd77b12b_0
+  - libaec=1.0.4=h33f27b4_1
+  - libdeflate=1.7=h2bbff1b_5
   - libpng=1.6.37=h1d00b33_2
   - libsodium=1.0.18=h8d14728_1
   - libtiff=4.1.0=h56a325e_1
   - libuv=1.41.0=h8ffe710_0
+  - libzopfli=1.0.3=ha925a31_0
+  - locket=0.2.1=py39haa95532_1
   - lz4-c=1.9.3=h8ffe710_0
   - m2w64-gcc-libgfortran=5.3.0=6
   - m2w64-gcc-libs=5.3.0=7
@@ -65,17 +84,20 @@ dependencies:
   - nbconvert=6.0.7=py39hcbf5309_3
   - nbformat=5.1.3=pyhd8ed1ab_0
   - nest-asyncio=1.5.1=pyhd8ed1ab_0
+  - networkx=2.5.1=pyhd3eb1b0_0
   - ninja=1.10.2=h5362a0b_0
   - notebook=6.3.0=py39hcbf5309_0
   - numpy=1.19.2=py39h729668d_0
   - numpy-base=1.19.2=py39hbd0edd7_0
   - olefile=0.46=pyh9f0ad1d_1
-  - openssl=1.1.1k=h8ffe710_0
+  - openjpeg=2.3.0=h5ec785f_1
+  - openssl=1.1.1k=h2bbff1b_0
   - packaging=20.9=pyh44b312d_0
   - pandas=1.2.3=py39hf11a4ad_0
   - pandoc=2.13=h8ffe710_0
   - pandocfilters=1.4.2=py_1
   - parso=0.8.2=pyhd8ed1ab_0
+  - partd=1.2.0=pyhd3eb1b0_0
   - pickleshare=0.7.5=py_1003
   - pillow=8.2.0=py39h4fa10fc_0
   - pip=21.0.1=pyhd8ed1ab_0
@@ -93,19 +115,28 @@ dependencies:
   - python_abi=3.9=1_cp39
   - pytorch=1.8.1=py3.9_cuda11.1_cudnn8_0
   - pytz=2021.1=pyhd3eb1b0_0
+  - pywavelets=1.1.1=py39h080aedc_4
   - pywin32=300=py39hb82d6ee_0
   - pywinpty=0.5.7=py39hde42818_1
+  - pyyaml=5.4.1=py39h2bbff1b_1
   - pyzmq=22.0.3=py39he46f08e_1
   - qt=5.9.7=vc14h73c81de_0
   - requests=2.25.1=pyhd3eb1b0_0
+  - scikit-image=0.18.1=py39hf11a4ad_0
+  - scikit-learn=0.24.1=py39hf11a4ad_0
+  - scipy=1.6.2=py39h14eb087_0
   - send2trash=1.5.0=py_0
   - setuptools=49.6.0=py39hcbf5309_3
   - sip=4.19.13=py39hd77b12b_0
   - six=1.15.0=pyh9f0ad1d_0
+  - snappy=1.1.8=h33f27b4_0
   - sqlite=3.35.3=h8ffe710_0
   - terminado=0.9.4=py39hcbf5309_0
   - testpath=0.4.4=py_0
+  - threadpoolctl=2.1.0=pyh5ca1d4c_0
+  - tifffile=2021.4.8=pyhd3eb1b0_2
   - tk=8.6.10=h8ffe710_1
+  - toolz=0.11.1=pyhd3eb1b0_0
   - torchaudio=0.8.1=py39
   - torchvision=0.9.1=py39_cu111
   - tornado=6.1=py39hb82d6ee_1
@@ -123,14 +154,18 @@ dependencies:
   - wincertstore=0.2=py39hcbf5309_1006
   - winpty=0.4.3=4
   - xz=5.2.5=h62dcd97_1
+  - yaml=0.2.5=he774522_0
   - zeromq=4.3.4=h0e60522_0
+  - zfp=0.5.5=hd77b12b_6
   - zipp=3.4.1=pyhd8ed1ab_0
   - zlib=1.2.11=h62dcd97_1010
   - zstd=1.4.9=h6255e5f_0
   - pip:
     - efficientnet-pytorch==0.6.3
+    - elasticdeform==0.4.9
     - filelock==3.0.12
     - gdown==3.12.2
+    - kornia==0.5.1
     - munch==2.5.0
     - pretrainedmodels==0.7.4
     - segmentation-models-pytorch==0.1.3
