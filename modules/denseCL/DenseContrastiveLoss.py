@@ -38,7 +38,7 @@ class DenseContrastiveLoss(torch.nn.Module):
             exp_pos = torch.exp(dot_pos / temperature)
             
             dot_neg = torch.bmm(query.view(B,1,D), dense_neg.view(B,D,S))
-            exp_neg = torch.exp(dot_neg/temperature)
+            exp_neg = torch.exp(dot_neg / temperature)
             sum_neg = torch.sum(exp_neg, axis=2, keepdim=True)
             
             loss_sum += -torch.log(exp_pos / (exp_pos + sum_neg))
